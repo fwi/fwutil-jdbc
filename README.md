@@ -27,6 +27,9 @@ The unit test class [TestNamed](./src/test/java/nl/fw/util/jdbc/TestNamed.java) 
 the more bare-metal unit test class [TestDbCrud](./src/test/java/nl/fw/util/jdbc/TestDbCrud.java) shows the usage of Create, Read, Update and Delete queries.
 
 A missing feature is the "result-set to Java-bean" mapping (commons-dbutils does provide this feature).
+Alternatively, use an ORM implementation like Hibernate. It is not difficult to setup and use, see [HibHik](https://github.com/intercommit/hibhik)
+to get started. 
+
 Other "historical" features:
  * A socket server called [SocketAcceptor](./src/test/java/nl/fw/util/socket/SocketAcceptor.java). Includes production features like "too busy" support and "wait for sockets tasks to complete". 
  * Properties manipulation and mapping to (and extracting from) beans in [BeanConfig](./src/test/java/nl/fw/util/BeanConfig.java). 
