@@ -9,9 +9,9 @@ Example of a usage pattern with a datasource backed by a database connection poo
 ```java
 try (DbConn dbc = new DbConn(myDataSource)) {
 	// DbConn will fetch a connection from the datasource.
-	ResultSet rs = dbc.createStatement().executeQuery("select * from myTable).getResulSet();
+	ResultSet rs = dbc.createStatement().executeQuery("select * from myTable").getResulSet();
 	// do work 
-	rs = dbc.createStatement().executeQuery("select * from anotherTable).getResulSet();
+	rs = dbc.createStatement().executeQuery("select * from anotherTable").getResulSet();
 	// DbConn will have closed all previously used resources (resultset and statement)
 	// do some more work
 	dbc.commitAndClose();
