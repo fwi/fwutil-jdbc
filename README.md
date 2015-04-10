@@ -31,5 +31,5 @@ Alternatively, use an ORM implementation like Hibernate. It is not difficult to 
 to get started. 
 
 Other "historical" features:
- * A socket server called [SocketAcceptor](./src/test/java/nl/fw/util/socket/SocketAcceptor.java). Includes production features like "too busy" support and "wait for sockets tasks to complete". 
- * Properties manipulation and mapping to (and extracting from) beans in [BeanConfig](./src/test/java/nl/fw/util/BeanConfig.java). 
+ * A socket server called [SocketAcceptor](./src/main/java/nl/fw/util/socket/SocketAcceptor.java). Includes production features like "too busy" support and "wait for sockets tasks to complete". 
+ * Properties manipulation and mapping to (and extracting from) beans in [BeanConfig](./src/main/java/nl/fw/util/BeanConfig.java). 
