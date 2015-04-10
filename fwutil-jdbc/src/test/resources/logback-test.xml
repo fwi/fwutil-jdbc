@@ -1,0 +1,44 @@
+<!-- If this file changes, logging is re-configured within 5 seconds and/or after 16 log-statements. -->
+<configuration scan="true" scanPeriod="5 seconds">
+
+	<property name="log.home" value="target" />
+	<property name="app.name" value="util-jdbc" />
+	<property name="log.name" value="${log.home}/${app.name}" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.name}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover with gz compression for old log-files -->
+			<fileNamePattern>${log.name}.%d.log.gz</fileNamePattern>
+			<!-- keep 7 days' worth of history -->
+			<maxHistory>7</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+            	class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        		<!-- or whenever the file size reaches 100MB -->
+        		<maxFileSize>100MB</maxFileSize>
+      		</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{dd HH:mm:ss:SSS} %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="nl.fw.util" level="info" />
+	<logger name="nl.fw.util.jdbc" level="debug" />
+	<logger name="nl.fw.util.socket" level="info" />
+	<logger name="com.zaxxer.hikari" level="debug" />
+
+	<root level="info">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
