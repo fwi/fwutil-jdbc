@@ -151,11 +151,17 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 				throw new SQLException("Cannot execute an update for a statement without a sql-query.");
 			} else {
 				setResultCount(getStatement().executeUpdate(getQuery(sql)));
+				if (isRegisterGeneratedKeys()) {
+					setResultSet(getStatement().getGeneratedKeys());
+				}
 			}
 		}
 		if (isCallableStatement()) {
 			if (sql == null) {
 				setResultCount(getCallableStatement().executeUpdate());
+				if (isRegisterGeneratedKeys()) {
+					setResultSet(getCallableStatement().getGeneratedKeys());
+				}
 			} else {
 				throw new SQLException("Cannot execute an update for a callable statement with another sql-query.");
 			}
@@ -163,6 +169,9 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 		if (isPreparedStatement()) {
 			if (sql == null) {
 				setResultCount(getPreparedStatement().executeUpdate());
+				if (isRegisterGeneratedKeys()) {
+					setResultSet(getPreparedStatement().getGeneratedKeys());
+				}
 			} else {
 				throw new SQLException("Cannot execute an update for a prepared statement with another sql-query.");
 			}
@@ -170,25 +179,14 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 		if (!haveStatement()) {
 			throw new SQLException("There is no statement set to perform a sql query with.");
 		}
-		if (isRegisterGeneratedKeys()) {
-			registerGeneratedKeys();
-		}
 		return me();
 	}
 	
+	/**
+	 * True if result count > 0 and generated keys are returned.
+	 */
 	protected boolean isRegisterGeneratedKeys() {
 		return (getResultCount() > 0 && isReturnGeneratedKeys());
-	}
-	
-	protected void registerGeneratedKeys() throws SQLException {
-		
-		if (isPlainStatement()) {
-			setResultSet(getStatement().getGeneratedKeys());
-		} else if (isCallableStatement()) {
-			setResultSet(getCallableStatement().getGeneratedKeys());
-		} else if (isPreparedStatement()) {
-			setResultSet(getPreparedStatement().getGeneratedKeys());
-		}
 	}
 	
 	/**

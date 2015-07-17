@@ -71,6 +71,7 @@ public class TestNamed {
 		dao.setCodeValue("testing", "1234");
 		assertEquals("Updated code value testing", "1234", dao.getCodeValue("testing"));
 		assertEquals("User names", 2, dao.loadUserNames().size());
+		assertTrue(dao.storeUser("auto-generated ID test") > 0);
 		
 		checkNonNamedQuery(dao);
 		checkAutoCloseable();

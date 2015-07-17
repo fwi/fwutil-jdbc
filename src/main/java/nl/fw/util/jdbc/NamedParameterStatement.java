@@ -447,6 +447,17 @@ public class NamedParameterStatement {
 	public int[] executeBatch() throws SQLException {
 		return statement.executeBatch();
 	}
+	
+	/**
+	 * Gets the generated keys after an {@link #executeUpdate()}
+	 * with a query for which {@link Statement#RETURN_GENERATED_KEYS} was set.
+	 * <br>See also {@link #executeUpdateAndGetGeneratedKeys()} and {@link PreparedStatement#getGeneratedKeys()}.
+	 * @return a resultset containing any generated keys.
+	 * @throws SQLException if something went wrong
+	 */
+	public ResultSet getGeneratedKeys() throws SQLException {
+		return statement.getGeneratedKeys();
+	}
 
 	/** The original query given when this object was created. */
 	public String getQuery() {

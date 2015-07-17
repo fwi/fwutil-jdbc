@@ -63,6 +63,9 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 		if (isNamedStatement()) {
 			if (sql == null) {
 				setResultCount(getNamedStatement().executeUpdate());
+				if (isRegisterGeneratedKeys()) {
+					setResultSet(getNamedStatement().getGeneratedKeys());
+				}
 			} else {
 				throw new SQLException("Cannot execute an update for a named statement with another sql-query.");
 			}
@@ -70,16 +73,6 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 		return super.executeUpdate(sql);
 	}
 	
-	@Override
-	protected void registerGeneratedKeys() throws SQLException {
-		
-		if (isNamedStatement()) {
-			setResultSet(getNamedStatement().getStatement().getGeneratedKeys());
-		} else {
-			super.registerGeneratedKeys();
-		}
-	}
-
 	@Override
 	public DBCONN executeQuery(String sql) throws SQLException {
 		

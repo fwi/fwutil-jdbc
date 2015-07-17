@@ -1,5 +1,6 @@
 package nl.fw.util.jdbc;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,26 @@ public class NamedDao {
 		return users;
 	}
 	
+	public long storeUser(final String name) {
+		
+		log.debug("Store new user, return auto-generated ID.");
+		final long[] userId = new long[1];
+		dbAction(new DbConnAction() {
+			@Override
+			public void toDb(DbConnNamedStatement<?> dbc) throws Exception {
+				
+				dbc.nameStatement("insert into users (name) values (@name)", true);
+				dbc.getNamedStatement().setString("name", name);
+				if (dbc.executeUpdate().getResultCount() != 1 || !dbc.getResultSet().next()) {
+					throw new SQLException("Creating user did not result in an update.");
+				}
+				userId[0] = dbc.getResultSet().getLong(1);
+			}
+		});
+		log.debug("New user got auto-generated ID {}", userId[0]);
+		return userId[0];
+	}
+
 	public void useNonNamedQuery(String qname) {
 		
 		log.debug("Example using a query-name that does not exist.");
