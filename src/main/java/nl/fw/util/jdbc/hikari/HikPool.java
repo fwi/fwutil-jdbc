@@ -220,7 +220,7 @@ public class HikPool implements Closeable {
 	
 	/**
 	 * Reads properties from a resource using UTF-8 encoding.
-	 * Uses {@link #getResourceAsStream(String)} to find and  open the properties file/resource.
+	 * Uses {@link DbConnUtil#getResourceAsStream(String)} to find and open the properties file/resource.
 	 * @param propsFileName The (file-) name of the resource containing the properties to load.
 	 * @return The properties loaded from resource.
 	 * @throws IOException When properties failed to load.
