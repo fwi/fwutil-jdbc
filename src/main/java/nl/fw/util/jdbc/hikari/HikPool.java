@@ -10,6 +10,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import nl.fw.util.jdbc.DbConnUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,7 +229,7 @@ public class HikPool implements Closeable {
 	public static Properties loadProps(String propsFileName) throws IOException {
 		
 		Properties props = new Properties();
-		InputStream in = getResourceAsStream(propsFileName);
+		InputStream in = DbConnUtil.getResourceAsStream(propsFileName);
 		if (in == null) {
 			throw new FileNotFoundException("Unable to find resource [" + propsFileName + "]");
 		}
@@ -242,27 +244,4 @@ public class HikPool implements Closeable {
 		return props;
 	}
 	
-	/** 
-	 * Uses the current thread's class loader to find a resource and open it as a stream. 
-	 */
-	public static InputStream getResourceAsStream(final String rname) {
-		return getContextClassLoader().getResourceAsStream(rname);
-	}
-
-	/**
-	 * @return The thread's context class-loader, the classloader of this class or the system classloader.
-	 */
-	public static ClassLoader getContextClassLoader() {
-		
-		ClassLoader cl = null;
-		try { cl = Thread.currentThread().getContextClassLoader(); } catch (Exception ignored) {}
-		if (cl == null) {
-			cl = HikPool.class.getClassLoader();
-			if (cl == null) {
-				cl = ClassLoader.getSystemClassLoader();
-			}
-		}
-		return cl;
-	}
-
 }

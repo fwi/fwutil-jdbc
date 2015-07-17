@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="5 seconds">
 
 	<property name="log.home" value="target" />
-	<property name="app.name" value="util-jdbc" />
+	<property name="app.name" value="fwutil-jdbc" />
 	<property name="log.name" value="${log.home}/${app.name}" />
 
 	<appender name="FILE"

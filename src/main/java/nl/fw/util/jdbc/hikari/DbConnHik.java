@@ -1,7 +1,5 @@
 package nl.fw.util.jdbc.hikari;
 
-import java.sql.SQLException;
-
 import nl.fw.util.jdbc.DbConnNamedStatement;
 import nl.fw.util.jdbc.INamedQuery;
 
@@ -15,11 +13,11 @@ public class DbConnHik extends DbConnNamedStatement<DbConnHik> {
 
 	private HikPool dbPool;
 	
-	public DbConnHik(HikPool dbPool) throws SQLException {
+	public DbConnHik(HikPool dbPool) {
 		this(dbPool, null);
 	}
 
-	public DbConnHik(HikPool dbPool, INamedQuery namedQueries) throws SQLException {
+	public DbConnHik(HikPool dbPool, INamedQuery namedQueries) {
 		this.dbPool = dbPool;
 		setDataSource(dbPool.getDataSource());
 		setNamedQueries(namedQueries);

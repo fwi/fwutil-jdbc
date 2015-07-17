@@ -62,7 +62,7 @@ public class NamedQuery implements INamedQuery {
 	public static LinkedHashMap<String, String> loadQueries(String resourceName, Charset charset) throws IOException {
 		
 		LinkedHashMap<String, String> qmap = null;
-		try (Reader in = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName), charset)) {
+		try (Reader in = new InputStreamReader(DbConnUtil.getResourceAsStream(resourceName), charset)) {
 			qmap = loadQueries(in);
 		}
 		return qmap;

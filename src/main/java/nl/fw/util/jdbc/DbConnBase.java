@@ -38,7 +38,7 @@ public class DbConnBase<DBCONN extends DbConnBase<DBCONN>> implements AutoClosea
 	 * @return Top-level implementation of DBCONN.
 	 */
 	@SuppressWarnings("unchecked")
-	protected DBCONN me() { return (DBCONN) this; } 
+	protected final DBCONN me() { return (DBCONN) this; } 
 	
 	/**
 	 * The datasource to get a connection from.

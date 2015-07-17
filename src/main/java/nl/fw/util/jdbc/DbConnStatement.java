@@ -170,10 +170,25 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 		if (!haveStatement()) {
 			throw new SQLException("There is no statement set to perform a sql query with.");
 		}
-		if (getResultCount() > 0 && isReturnGeneratedKeys()) {
-			setResultSet(getStatement().getGeneratedKeys());
+		if (isRegisterGeneratedKeys()) {
+			registerGeneratedKeys();
 		}
 		return me();
+	}
+	
+	protected boolean isRegisterGeneratedKeys() {
+		return (getResultCount() > 0 && isReturnGeneratedKeys());
+	}
+	
+	protected void registerGeneratedKeys() throws SQLException {
+		
+		if (isPlainStatement()) {
+			setResultSet(getStatement().getGeneratedKeys());
+		} else if (isCallableStatement()) {
+			setResultSet(getCallableStatement().getGeneratedKeys());
+		} else if (isPreparedStatement()) {
+			setResultSet(getPreparedStatement().getGeneratedKeys());
+		}
 	}
 	
 	/**
@@ -335,7 +350,7 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 
 	/**
 	 * Closes all open resources and commits the transaction (if any).
-	 * Does not close the underlying transaction.
+	 * Does not close the underlying connection.
 	 * <br>To commit without closing open resources, call {@link #getActiveConnection()} 
 	 * and call commit on the returned connection. 
 	 */

@@ -53,7 +53,7 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 		closeQueryResources();
 		setNamed(true);
 		setReturnGeneratedKeys(returnGeneratedKeys == Statement.RETURN_GENERATED_KEYS);
-		setNamedStatement(new NamedParameterStatement(getConnection(), getQuery(sql)));
+		setNamedStatement(new NamedParameterStatement(getConnection(), getQuery(sql), returnGeneratedKeys));
 		return me();
 	}
 	
@@ -68,6 +68,16 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 			}
 		}
 		return super.executeUpdate(sql);
+	}
+	
+	@Override
+	protected void registerGeneratedKeys() throws SQLException {
+		
+		if (isNamedStatement()) {
+			setResultSet(getNamedStatement().getStatement().getGeneratedKeys());
+		} else {
+			super.registerGeneratedKeys();
+		}
 	}
 
 	@Override
