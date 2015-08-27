@@ -8,7 +8,7 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import com.zaxxer.hikari.HikariConfigMXBean;
-import com.zaxxer.hikari.pool.HikariPoolMXBean;
+import com.zaxxer.hikari.HikariPoolMXBean;
 
 /**
  * Little Helper class to get access to the various HikariPool methods via JMX.
@@ -176,6 +176,16 @@ public class HikariPoolJmx implements HikariPoolMXBean, HikariConfigMXBean {
 		setConfigNumber("ValidationTimeout", validationTimeoutMs);
 	}
 	
+	@Override
+	public void setPassword(String password) {
+		setConfigString("Password", password);
+	}
+
+	@Override
+	public void setUsername(String username) {
+		setConfigString("Username", username);
+	}
+
 	protected Number getConfigNumber(String attributeName) {
 		try {
 			return (Number) mBeanServer.getAttribute(poolConfigAccessor, attributeName);
@@ -187,6 +197,16 @@ public class HikariPoolJmx implements HikariPoolMXBean, HikariConfigMXBean {
 	}
 	
 	protected void setConfigNumber(String attributeName, Number value) {
+		try {
+			mBeanServer.setAttribute(poolConfigAccessor, new Attribute(attributeName, value));
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected void setConfigString(String attributeName, String value) {
 		try {
 			mBeanServer.setAttribute(poolConfigAccessor, new Attribute(attributeName, value));
 		} catch (RuntimeException e) {
