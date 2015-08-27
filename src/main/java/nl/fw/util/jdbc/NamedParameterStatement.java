@@ -365,6 +365,17 @@ public class NamedParameterStatement {
 			statement.setDouble(indexes[i], value);
 		}
 	}
+	
+	/**
+	 * The new query timeout in seconds.
+	 * See also {@link Statement#setQueryTimeout(int)}.
+	 * @param seconds If set to zero, there is no timeout.
+	 * @throws SQLException if a database access error occurs, this method is called on a closed Statement 
+	 * or the condition seconds >= 0 is not satisfied
+	 */
+	public void setQueryTimeout(int seconds) throws SQLException {
+		getStatement().setQueryTimeout(seconds);
+	}
 
 	/**
 	 * Returns the underlying statement.
