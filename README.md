@@ -2,10 +2,11 @@ Jdbc Util
 --------
 
 A small package to aid in working with plain JDBC. 
-Similar to [commons-dbutils](http://commons.apache.org/proper/commons-dbutils/index.html)
+It is similar to [commons-dbutils](http://commons.apache.org/proper/commons-dbutils/index.html)
 but taking a different approach using an extendable fluent API to query the database.
+Mapping result-sets to objects is not included, have a look at [sql2o](http://www.sql2o.org/) or the previously mentioned commons-dbutils if you want this. For a full Object-relational mapping Hibernate can be used, see [HibHik](https://github.com/intercommit/hibhik) to get started. 
 
-Example of a usage pattern with a datasource backed by a database connection pool (from [DbConn](./src/main/java/nl/fw/util/jdbc/DbConn.java)):
+Below an example of an usage pattern with a datasource backed by a database connection pool (from [DbConn](./src/main/java/nl/fw/util/jdbc/DbConn.java)):
 ```java
 try (DbConn dbc = new DbConn(myDataSource)) {
 	// DbConn will fetch a connection from the datasource.
@@ -26,10 +27,7 @@ Other JDBC features:
 The unit test class [TestNamed](./src/test/java/nl/fw/util/jdbc/TestNamed.java) shows the usage of all these features, 
 the more bare-metal unit test class [TestDbCrud](./src/test/java/nl/fw/util/jdbc/TestDbCrud.java) shows the usage of Create, Read, Update and Delete queries.
 
-A missing feature is the "result-set to Java-bean" mapping (commons-dbutils does provide this feature).
-Alternatively, use an ORM implementation like Hibernate. It is not difficult to setup and use, see [HibHik](https://github.com/intercommit/hibhik)
-to get started. 
-
 Other "historical" features:
  * A socket server called [SocketAcceptor](./src/main/java/nl/fw/util/socket/SocketAcceptor.java). Includes production features like "too busy" support and "wait for sockets tasks to complete". 
+ * Object cloning and gzipping in [BeanClone](./src/main/java/nl/fw/util/BeanClone.java).
  * Properties manipulation and mapping to (and extracting from) beans in [BeanConfig](./src/main/java/nl/fw/util/BeanConfig.java). 
