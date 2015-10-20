@@ -134,6 +134,7 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 	 * Executes an update query and sets the {@link #getResultCount()}.
 	 * If {@link #isReturnGeneratedKeys()} is true,
 	 * the generated keys resultset is also fetched and available in {@link #getResultSet()}.
+	 * Closes any old result-set before setting a new result-set.
 	 */
 	public DBCONN executeUpdate() throws SQLException {
 		
@@ -150,28 +151,34 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 			if (sql == null) {
 				throw new SQLException("Cannot execute an update for a statement without a sql-query.");
 			} else {
+				closeResultSet();
 				setResultCount(getStatement().executeUpdate(getQuery(sql)));
 				if (isRegisterGeneratedKeys()) {
 					setResultSet(getStatement().getGeneratedKeys());
 				}
+				return me();
 			}
 		}
 		if (isCallableStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultCount(getCallableStatement().executeUpdate());
 				if (isRegisterGeneratedKeys()) {
 					setResultSet(getCallableStatement().getGeneratedKeys());
 				}
+				return me();
 			} else {
 				throw new SQLException("Cannot execute an update for a callable statement with another sql-query.");
 			}
 		}
 		if (isPreparedStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultCount(getPreparedStatement().executeUpdate());
 				if (isRegisterGeneratedKeys()) {
 					setResultSet(getPreparedStatement().getGeneratedKeys());
 				}
+				return me();
 			} else {
 				throw new SQLException("Cannot execute an update for a prepared statement with another sql-query.");
 			}
@@ -193,13 +200,13 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 	 * Executes a select query and makes the results available in {@link #getResultSet()}.
 	 */
 	public DBCONN executeQuery() throws SQLException {
-
 		return executeQuery(null);
 	}
 	
 	/**
 	 * Executes a select query using the previously created statement
 	 * and makes the results available in {@link #getResultSet()}.
+	 * Closes any old result-set before setting a new result-set.
 	 */
 	public DBCONN executeQuery(String sql) throws SQLException {
 
@@ -207,19 +214,25 @@ public class DbConnStatement<DBCONN extends DbConnStatement<DBCONN>>
 			if (sql == null) {
 				throw new SQLException("Cannot execute a query for a statement without a sql-query.");
 			} else {
+				closeResultSet();
 				setResultSet(getStatement().executeQuery(getQuery(sql)));
+				return me();
 			}
 		}
 		if (isCallableStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultSet(getCallableStatement().executeQuery());
+				return me();
 			} else {
 				throw new SQLException("Cannot execute a query for a callable statement with another sql-query.");
 			}
 		}
 		if (isPreparedStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultSet(getPreparedStatement().executeQuery());
+				return me();
 			} else {
 				throw new SQLException("Cannot execute a query for a prepared statement with another sql-query.");
 			}

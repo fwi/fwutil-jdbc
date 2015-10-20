@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 //Copied from Yapool 0.9.3
 public class SocketTask implements Runnable {
 
-	private static Logger log = LoggerFactory.getLogger(SocketTask.class);
+	private static final Logger log = LoggerFactory.getLogger(SocketTask.class);
 	
 	protected Socket socket;
 	private boolean tooBusy;

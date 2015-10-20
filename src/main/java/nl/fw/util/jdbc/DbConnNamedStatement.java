@@ -62,10 +62,12 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 		
 		if (isNamedStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultCount(getNamedStatement().executeUpdate());
 				if (isRegisterGeneratedKeys()) {
 					setResultSet(getNamedStatement().getGeneratedKeys());
 				}
+				return me();
 			} else {
 				throw new SQLException("Cannot execute an update for a named statement with another sql-query.");
 			}
@@ -78,7 +80,9 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 		
 		if (isNamedStatement()) {
 			if (sql == null) {
+				closeResultSet();
 				setResultSet(getNamedStatement().executeQuery());
+				return me();
 			} else {
 				throw new SQLException("Cannot execute a query for a named statement with another sql-query.");
 			}
@@ -121,7 +125,7 @@ public class DbConnNamedStatement <DBCONN extends DbConnNamedStatement<DBCONN>>
 	@Override
 	public DBCONN closeStatement() {
 		
-		// Call super first to close the resulset.
+		// Call super first to close the result-set.
 		super.closeStatement();
 		if (getNamedStatement() != null) {
 			try {

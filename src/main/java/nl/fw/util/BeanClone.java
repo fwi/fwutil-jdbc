@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for (un)serializing and (un)gzipping objects. 
- * Any thrown checked exceptions are re-thrown as a runtime exception.
+ * Any thrown checked exceptions are re-thrown as runtime exceptions.
  * @author Fred
  *
  */
@@ -25,7 +25,7 @@ public class BeanClone {
 	protected static Logger log = LoggerFactory.getLogger(BeanClone.class);
 	
 	/** Default byte-buffer size for streams used in this class (512 bytes, also default for GZIP streams). */
-	public static final int BUFFER_SIZE = 512;
+	public static int BUFFER_SIZE = 512;
 	
 	// Utility class, do not instantiate
 	private BeanClone() {}

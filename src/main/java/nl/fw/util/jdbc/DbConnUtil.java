@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 
-import nl.fw.util.jdbc.hikari.HikPool;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +147,7 @@ public class DbConnUtil {
 		ClassLoader cl = null;
 		try { cl = Thread.currentThread().getContextClassLoader(); } catch (Exception ignored) {}
 		if (cl == null) {
-			cl = HikPool.class.getClassLoader();
+			cl = DbConnUtil.class.getClassLoader();
 			if (cl == null) {
 				cl = ClassLoader.getSystemClassLoader();
 			}
