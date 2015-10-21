@@ -46,7 +46,7 @@ public class TestDbCrud {
 		log.debug("Database closed.");
 	}
 	
-	private int recordId, recordId2;
+	private int recordId, recordId2, recordId3;
 	
 	@Test
 	public void dbCrud() throws Exception {
@@ -119,15 +119,24 @@ public class TestDbCrud {
 		} finally {
 			dbc.close();
 		}
-		log.debug("insert second record");
+		log.debug("insert second and third record");
 		try {
 			dbc.prepareStatement("insert into table_test (name) values (?)", true);
 			dbc.getPreparedStatement().setString(1, "Bugs Bunny");
 			ResultSet rs = dbc.executeUpdate().getResultSet();
 			assertTrue("Have a generated key.", rs.next());
 			recordId2 = rs.getInt(1);
+			dbc.getPreparedStatement().setString(1, "Daffy Duck");
+			ResultSet rs2 = dbc.executeUpdate().getResultSet();
+			// Even if DbConn does not close the previous result-set,
+			// it is closed by the HSQL JDBC driver-implementation.
+			// That makes this test non-conclusive for the moment ...
+			assertTrue("Verify first result-set is closed", rs.isClosed());
+			rs2.next();
+			recordId3 = rs2.getInt(1);
 			dbc.commitAndClose();
 			log.debug("Created record {}", recordId2);
+			assertTrue("Verify second result-set is closed", rs2.isClosed());
 		} finally {
 			dbc.rollbackAndClose();
 		}
@@ -165,22 +174,29 @@ public class TestDbCrud {
 			ResultSet rs = dbc.executeQuery().getResultSet();
 			rs.next();
 			assertEquals("Name", "Bugs Bunny", rs.getString("name"));
+			// verify closing of result-sets, see also "insert second and third record" above
+			dbc.getPreparedStatement().setLong(1, recordId3);
+			ResultSet rs2 = dbc.executeQuery().getResultSet();
+			assertTrue("Verify first result-set is closed", rs.isClosed());
+			rs2.next();
+			assertEquals("Name", "Daffy Duck", rs2.getString("name"));
 		} finally {
 			dbc.close();
 		}
-		log.debug("delete first record by ID");
+		log.debug("delete first and third record by ID");
 		try {
-			dbc.prepareStatement("delete from table_test where id=?", true);
+			dbc.prepareStatement("delete from table_test where id=?");
 			dbc.getPreparedStatement().setLong(1, recordId);
 			assertEquals("One record deleted.", 1, dbc.executeUpdate().getResultCount());
+			dbc.getPreparedStatement().setLong(1, recordId3);
+			assertEquals("One record deleted.", 1, dbc.executeUpdate().getResultCount());
 			dbc.commitAndClose();
-		log.debug("Created record {}", recordId2);
 		} finally {
 			dbc.rollbackAndClose();
 		}
-		log.debug("verify delete of first record");
+		log.debug("verify delete of first and third record");
 		try {
-			dbc.prepareStatement("select * from table_test");
+			dbc.prepareStatement("select * from table_test order by id");
 			ResultSet rs = dbc.executeQuery().getResultSet();
 			rs.next();
 			assertEquals("Name", "Bugs Bunny", rs.getString("name"));
