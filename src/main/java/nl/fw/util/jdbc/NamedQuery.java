@@ -47,6 +47,9 @@ public class NamedQuery implements INamedQuery {
 	/** Beginning or end marker for a query in a query-file "{@code --[}". */
 	public static final String QUERY_NAME_MARKER = "--[";
 
+	/** Beginning or end marker for a query in a query-file (MySQL requires a space after the {@code --}) "{@code -- [}". */
+	public static final String QUERY_NAME_MARKER2 = "-- [";
+
 	/**
 	 * Opens a resource text file in UTF-8 encoding and loads the queries.
 	 * See {@link #loadQueries(Reader, Map)}.
@@ -81,7 +84,7 @@ public class NamedQuery implements INamedQuery {
 	
 	/**
 	 * Loads queries form a sql-file/inputstream.
-	 * Queries must be formatted using the {@link #QUERY_NAME_MARKER} in the following manner:
+	 * Queries must be formatted using the {@link #QUERY_NAME_MARKER} or {@link #QUERY_NAME_MARKER2} in the following manner:
 <pre>{@literal 
 -- Just a comment
 // Also a comment
@@ -119,6 +122,9 @@ where this=that and other=stuff
 			if (line.trim().isEmpty()) continue;
 			if (line.startsWith(QUERY_NAME_MARKER)) {
 				line = line.substring(QUERY_NAME_MARKER.length()-1);
+			}
+			if (line.startsWith(QUERY_NAME_MARKER2)) {
+				line = line.substring(QUERY_NAME_MARKER2.length()-1);
 			}
 			if (line.startsWith("--") || line.startsWith("//")) {
 				continue;
