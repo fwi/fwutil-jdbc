@@ -5,30 +5,24 @@
 	<property name="app.name" value="fwutil-jdbc" />
 	<property name="log.name" value="${log.home}/${app.name}" />
 
-	<appender name="FILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${log.name}.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- daily rollover with gz compression for old log-files -->
 			<fileNamePattern>${log.name}.%d.%i.log.gz</fileNamePattern>
-			<!-- keep 7 days' worth of history -->
+			<!-- per file max 100MB with oldest file max 7 days old and all archived log files together max 1GB -->
+       		<maxFileSize>100MB</maxFileSize>
 			<maxHistory>7</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-            	class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        		<!-- or whenever the file size reaches 100MB -->
-        		<maxFileSize>100MB</maxFileSize>
-      		</timeBasedFileNamingAndTriggeringPolicy>
+			<totalSizeCap>1GB</totalSizeCap>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%d{dd HH:mm:ss:SSS} %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<appender name="STDOUT"
-		class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n
-			</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
