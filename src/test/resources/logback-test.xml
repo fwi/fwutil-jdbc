@@ -10,7 +10,7 @@
 		<file>${log.name}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover with gz compression for old log-files -->
-			<fileNamePattern>${log.name}.%d.log.gz</fileNamePattern>
+			<fileNamePattern>${log.name}.%d.%i.log.gz</fileNamePattern>
 			<!-- keep 7 days' worth of history -->
 			<maxHistory>7</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy
