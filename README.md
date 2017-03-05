@@ -4,7 +4,7 @@ Jdbc Util
 A small package to aid in working with plain JDBC. 
 It is similar to [commons-dbutils](http://commons.apache.org/proper/commons-dbutils/index.html)
 but taking a different approach using an extendable fluent API to query the database.
-Mapping result-sets to objects is not included, have a look at [sql2o](http://www.sql2o.org/) or the previously mentioned commons-dbutils if you want this. For a full Object-relational mapping Hibernate can be used, see [HibHik](https://github.com/intercommit/hibhik) to get started. 
+Mapping result-sets to objects is not included, have a look at [sql2o](http://www.sql2o.org/) or the previously mentioned commons-dbutils if you want this. For a full Object-relational mapping Hibernate can be used, see [HibHik](https://github.com/intercommit/hibhik) to get started. For a typesafe alternative, have a look at [jOOQ](http://www.jooq.org/). 
 
 Below an example of an usage pattern with a datasource backed by a database connection pool (from [DbConn](./src/main/java/nl/fw/util/jdbc/DbConn.java)):
 ```java

@@ -1,5 +1,5 @@
 <!-- If this file changes, logging is re-configured within 5 seconds and/or after 16 log-statements. -->
-<configuration scan="true" scanPeriod="5 seconds">
+<configuration scan="true" scanPeriod="5 seconds" packagingData="true">
 
 	<property name="log.home" value="target" />
 	<property name="app.name" value="fwutil-jdbc" />
@@ -7,6 +7,7 @@
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${log.name}.log</file>
+		<immediateFlush>false</immediateFlush>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- daily rollover with gz compression for old log-files -->
 			<fileNamePattern>${log.name}.%d.%i.log.gz</fileNamePattern>
@@ -14,6 +15,7 @@
        		<maxFileSize>100MB</maxFileSize>
 			<maxHistory>7</maxHistory>
 			<totalSizeCap>1GB</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%d{dd HH:mm:ss:SSS} %-5level %logger{35} - %msg%n</pattern>

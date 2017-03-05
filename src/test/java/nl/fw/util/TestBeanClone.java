@@ -32,8 +32,9 @@ public class TestBeanClone {
 	public void testGzipSerializeBig() {
 		
 		Map<String, Object> m = new HashMap<String, Object>();
-		for (int i = 0; i < 1000; i ++)
-		m.put("key" + i, "value" + i);
+		for (int i = 0; i < 1000; i ++) {
+			m.put("key" + i, "value" + i);
+		}
 		Map<String, Object> m2 = cloneViaGzip(m);
 		assertTrue(m.equals(m2));
 	}

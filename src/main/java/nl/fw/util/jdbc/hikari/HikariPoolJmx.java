@@ -12,8 +12,8 @@ import com.zaxxer.hikari.HikariPoolMXBean;
 
 /**
  * Little Helper class to get access to the various HikariPool methods via JMX.
- * <br>Note: the Hikari interfaces changed name from HikariCP version 2.3.8. to 2.3.9, 
- * i.e. version 2.3.9 or higher is required, but not 2.4.x since interfaces changed name again.
+ * <br>Note: the Hikari interfaces changed name between versions, 
+ * but appear stable since 2.4.x forwards.
  * <br>Usage of this class requires the HikariCP configuration option <code>hikari.registerMbeans=true</code>
  * <p>
  * Copied and adjusted from 
