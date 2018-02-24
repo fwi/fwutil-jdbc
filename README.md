@@ -31,3 +31,21 @@ Other "historical" features:
  * A socket server called [SocketAcceptor](./src/main/java/nl/fw/util/socket/SocketAcceptor.java). Includes production features like "too busy" support and "wait for sockets tasks to complete". 
  * Object cloning and gzipping in [BeanClone](./src/main/java/nl/fw/util/BeanClone.java).
  * Properties manipulation and mapping to (and extracting from) beans in [BeanConfig](./src/main/java/nl/fw/util/BeanConfig.java). 
+ 
+# Building
+ 
+Maven (3.5+) and Java 8 are required.
+Open command prompt in project directory and run:
+```
+mvn clean verify
+```
+For a code-coverage report, open `pom.xml` and ensure the `forkCount` option is disabled. Then run:
+```
+mvn clean cobertura:cobertura
+```
+Report will be available in `target/site/cobertura/index.html`
+
+Release packages are created using the assembly configured in the `dist` directory:
+```
+mvn clean verify assembly:single
+```

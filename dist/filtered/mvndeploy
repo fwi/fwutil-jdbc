@@ -1,0 +1,1 @@
+mvn deploy:deploy-file -Dfile=${project.artifactId}-${project.version}.jar -DpomFile=${project.artifactId}-${project.version}-pom.xml -Dsources=${project.artifactId}-${project.version}-sources.jar -Durl=file:///maven-repo/releases 
