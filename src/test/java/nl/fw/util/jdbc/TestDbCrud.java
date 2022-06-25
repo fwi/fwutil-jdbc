@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import nl.fw.util.jdbc.DbConnUtil;
 import nl.fw.util.jdbc.hikari.DbConnHik;
 import nl.fw.util.jdbc.hikari.HikPool;
 

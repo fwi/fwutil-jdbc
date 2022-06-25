@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import nl.fw.util.jdbc.DbConn;
-import nl.fw.util.jdbc.NamedQuery;
 import nl.fw.util.jdbc.hikari.DbConnHik;
 import nl.fw.util.jdbc.hikari.HikPool;
 

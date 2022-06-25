@@ -4,9 +4,6 @@ package nl.fw.util;
 import java.util.Map;
 import java.util.Properties;
 
-import nl.fw.util.BeanClone;
-import nl.fw.util.BeanConfig;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
