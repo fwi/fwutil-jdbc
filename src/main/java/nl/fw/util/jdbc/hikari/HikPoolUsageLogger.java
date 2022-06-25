@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariPoolMXBean;
+
 /**
  * Logs a Hikari pool's status at regular intervals using all readily available counters and sizes
  * (there is no performance impact on the pool itself).
@@ -27,7 +29,9 @@ public class HikPoolUsageLogger implements Runnable {
 	 */
 	public Logger log = LoggerFactory.getLogger(getClass());
 
-	private HikariPoolJmx pool;
+	private HikariPoolMXBean pool;
+	private String poolName;
+
 	private ScheduledExecutorService executor;
 	private boolean closeExecutor;
 	private ScheduledFuture<?> scheduledTask;
@@ -37,15 +41,17 @@ public class HikPoolUsageLogger implements Runnable {
 	public HikPoolUsageLogger() {
 		super();
 	}
-	public HikPoolUsageLogger(HikariPoolJmx pool) {
+	public HikPoolUsageLogger(HikariPoolMXBean pool, String poolName) {
 		super();
-		setPool(pool);
+		setPool(pool, poolName);
 	}
 	
-	public void setPool(HikariPoolJmx pool) {
+	public void setPool(HikariPoolMXBean pool, String poolName) {
 		this.pool = pool;
+		this.poolName = poolName;
 	}
-	public HikariPoolJmx getPool() { 
+	
+	public HikariPoolMXBean getPool() { 
 		return pool; 
 	}
 	
@@ -76,7 +82,7 @@ public class HikPoolUsageLogger implements Runnable {
 		this.executor = executor;
 		scheduleTask();
 		if (log.isDebugEnabled()) {
-			log.debug("Started pool usage logger for pool " + pool.getPoolName());
+			log.debug("Started pool usage logger for pool " + poolName);
 		}
 	}
 	
@@ -96,7 +102,7 @@ public class HikPoolUsageLogger implements Runnable {
 			executor.shutdown();
 		}
 		if (log.isDebugEnabled()) {
-			log.debug("Stopped pool usage logger for pool " + pool.getPoolName());
+			log.debug("Stopped pool usage logger for pool " + poolName);
 		}
 	}
 	
@@ -137,7 +143,7 @@ public class HikPoolUsageLogger implements Runnable {
 	public String getReport() {
 
 		StringBuilder sb = new StringBuilder(64);
-		sb.append("Pool stats ").append(pool.getPoolName()).append(" (");
+		sb.append("Pool stats ").append(poolName).append(" (");
 		lastTotalSize = pool.getTotalConnections();
 		sb.append("total=").append(lastTotalSize);
 		// activeSize is already updated in report()-method.

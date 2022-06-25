@@ -22,8 +22,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * Utility class for opening and closing a Hikari-pool 
  * and providing related pool functions such as 
  * {@link #setLogPoolUsage(boolean)}
- * and {@link #getDataSource()}
- * and {@link #getJmx()}. 
+ * and {@link #getDataSource()}.
  * @author fred
  *
  */
@@ -38,11 +37,6 @@ public class HikPool implements Closeable {
 	public static final String POOL_NAME_PROP = "poolName";
 	
 	/**
-	 * The property name enabling the JMX interface.
-	 */
-	public static final String JMX_ENABLED_PROP = "registerMbeans";
-	
-	/**
 	 * The properties file-name containing the default values for all pools. 
 	 * Set to null to skip loading default properties.
 	 */
@@ -50,7 +44,6 @@ public class HikPool implements Closeable {
 
 	private HikariDataSource hds;
 	private String dbName;
-	private HikariPoolJmx poolJmx;
 	private boolean logPoolUsage;
 	private HikPoolUsageLogger poolUsageLogger;
 	private long reportIntervalMs = 10000L;
@@ -122,8 +115,7 @@ public class HikPool implements Closeable {
 	/**
 	 * Opens a Hikari database connection pool configured using the given properties.
 	 * To ensure a database connection can be created set <tt>initializationFailFast=true</tt> in the properties.
-	 * To enable pool usage logging, call {@link #setLogPoolUsage(boolean)} before calling this method
-	 * and make sure the {@link #JMX_ENABLED_PROP} has value {@code true} in the given properties.
+	 * To enable pool usage logging, call {@link #setLogPoolUsage(boolean)} before calling this method.
 	 * @param dbProps The properties used to configure the connection pool (see also {@link HikariConfig#HikariConfig(String)}. 
 	 */
 	public void open(Properties dbProps) {
@@ -133,18 +125,12 @@ public class HikPool implements Closeable {
 		// open the pool
 		hds = new HikariDataSource(hc);
 		// if initializationFailFast is true, a runtime-exception was thrown if the pool could not be opened. 
-		if ("TRUE".equalsIgnoreCase(dbProps.getProperty(JMX_ENABLED_PROP))) {
-			try {
-				poolJmx = new HikariPoolJmx(dbName);
-				log.debug("HikariPool JMX object found.");
-				if (isLogPoolUsage()) {
-					poolUsageLogger = new HikPoolUsageLogger(poolJmx);
-					poolUsageLogger.setReportInterval(reportIntervalMs);
-					poolUsageLogger.start();
-				}
-			} catch (Exception e) {
-				log.info("No HikariPool JMX object available: " + e);
-			}
+		if (isLogPoolUsage()) {
+			// More about JMX and MBeans is explained at 
+			// https://github.com/brettwooldridge/HikariCP/wiki/MBean-(JMX)-Monitoring-and-Management
+			poolUsageLogger = new HikPoolUsageLogger(hds.getHikariPoolMXBean(), hc.getPoolName());
+			poolUsageLogger.setReportInterval(reportIntervalMs);
+			poolUsageLogger.start();
 		}
 	}
 	
@@ -153,14 +139,6 @@ public class HikPool implements Closeable {
 	 */
 	public HikariDataSource getDataSource() {
 		return hds;
-	}
-
-	/**
-	 * Returns the JMX-interface for the pool. This interface is only available when property
-	 * <tt>registerMbeans=true</tt> is set.
-	 */
-	public HikariPoolJmx getJmx() {
-		return poolJmx;
 	}
 
 	/**
@@ -180,6 +158,12 @@ public class HikPool implements Closeable {
 			}
 			hds = null;
 		}
+	}
+	
+	/* *** Convenience methods *** */
+	
+	public int getActiveConnections() {
+		return hds.getHikariPoolMXBean().getActiveConnections();
 	}
 
 	/* *** Bean methods *** */

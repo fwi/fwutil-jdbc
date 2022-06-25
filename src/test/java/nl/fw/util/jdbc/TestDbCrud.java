@@ -209,7 +209,7 @@ public class TestDbCrud {
 	
 	private void assertNoConnectionsInUse() {
 		
-		assertEquals("No connections in use", 0, dbPool.getJmx().getActiveConnections());
+		assertEquals("No connections in use", 0, dbPool.getActiveConnections());
 	}
 
 }
